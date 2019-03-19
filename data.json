@@ -1,0 +1,57 @@
+{
+    "components": [
+        {
+            "url": "A",
+            "name": "Component A",
+            "display": true,
+            "slides": [
+                {
+                    "content": "SANBE19008_A1.jpg",
+                    "type": "img",
+                    "title": "A1",
+                    "show": true
+                },
+                {
+                    "content": "SANBE19008_A2.jpg",
+                    "type": "img",
+                    "title": "A2",
+                    "show": true
+                },
+                {
+                    "content": "SANBE19008_A3.jpg",
+                    "type": "img",
+                    "title": "A3",
+                    "show": true
+                }
+            ]
+        },
+        {
+            "url": "B",
+            "name": "Component B",
+            "display": true,            
+            "slides": [
+                {
+                    "content": "SANBE19008_B1.jpg",
+                    "type": "img",
+                    "video": "Bravis-OCC-2018.mp4",
+                    "title": "B1",
+                    "show": true
+                },
+                {
+                    "content": "SANBE19008_B2.jpg",
+                    "type": "img",
+                    "title": "B2",
+                    "show": true
+                },
+                {
+                    "content": "SANBE19008_B3.jpg",
+                    "type": "img",
+                    "title": "B3",
+                    "show": true
+                }
+            ]
+    
+        }
+    ]
+
+}
