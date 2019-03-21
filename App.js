@@ -37,27 +37,29 @@ export default class App extends Component {
     // this.updateState = this.updateState.bind(this);
   }
 
-  updateState = (title) => {
-    if (title === undefined) {
-      console.log("NO TITLE");
-      return;
-    }
-  
-    this.setState((state) => {
-      let newState = Object.assign({}, state);
-      newState.components.forEach((comp) => {
-        comp.slides.forEach((slide) => {
-          if (slide.title == title) {
-            slide.show = !slide.show
-          }
-        });
-      });
-  
-      return newState
-    });
-  }
+
 
   renderItem = ({ item, index, move, moveEnd, isActive }) => {
+
+    const updateState = (title) => {
+      if (title === undefined) {
+        console.log("NO TITLE");
+        return;
+      }
+    
+      this.setState((state) => {
+        let newState = Object.assign({}, state);
+        newState.components.forEach((comp) => {
+          comp.slides.forEach((slide) => {
+            if (slide.title == title) {
+              slide.show = !slide.show
+            }
+          });
+        });
+    
+        return newState
+      });
+    }
 
     // console.log('ITEM: ', item);
     return (
@@ -67,9 +69,10 @@ export default class App extends Component {
           alignItems: 'center', 
           justifyContent: 'center' 
         }}
+        onPress={() => updateState(item.title)}
         onLongPress={move}
         onPressOut={moveEnd}
-        onPress={() => this.updateState(item.title)}
+
       >
         {
           item.show 
