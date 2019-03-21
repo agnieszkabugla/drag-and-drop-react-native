@@ -1,78 +1,104 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, Text } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import data from './data.json'
 
-class App extends Component {
 
-  state = {
-    // data: [...Array(20)].map((d, index) => ({
-    //   key: `item-${index}`,
-    //   label: index,
-    //   backgroundColor: `rgb(${Math.floor(Math.random() * 255)}, ${index * 5}, ${132})`,
-    // }))
-    data: data.components[0].slides,
-    data1: data.components
+
+const A1 = require('./assets/SANBE19008_A1.jpg');
+const A2 = require('./assets/SANBE19008_A2.jpg');
+const A3 = require('./assets/SANBE19008_A3.jpg');
+const B1 = require('./assets/SANBE19008_B1.jpg');
+const B2 = require('./assets/SANBE19008_B2.jpg');
+const B3 = require('./assets/SANBE19008_B3.jpg');
+
+
+const colors  = {
+  primary: '#003760',
+  secondary: '#ff6432',
+  active: '#27ad57',  // green
+  inactive: '#f4424e', // red
+  lightGrey: '#ddd',
+  darkerGrey: '#3D3A38',
+  white: '#fff',
+}
+
+
+
+export default class App extends Component {
+
+  constructor(props) {
+
+    super(props);
+    this.state = {
+      components: data.components,
+    };
+
+    // this.updateState = this.updateState.bind(this);
   }
 
-
-
-    
-
-
-  end = (data, keyExtractor) => {
-    console.log('data: ',data);
-    console.log('key ex', keyExtractor );
+  updateState = (title) => {
+    if (title === undefined) {
+      console.log("NO TITLE");
+      return;
+    }
+  
+    this.setState((state) => {
+      let newState = Object.assign({}, state);
+      newState.components.forEach((comp) => {
+        comp.slides.forEach((slide) => {
+          if (slide.title == title) {
+            slide.show = !slide.show
+          }
+        });
+      });
+  
+      return newState
+    });
   }
-
-
 
   renderItem = ({ item, index, move, moveEnd, isActive }) => {
 
-    console.log('ITEM: ', item);
+    // console.log('ITEM: ', item);
     return (
       <TouchableOpacity
         style={{ 
-          height: 100, 
           backgroundColor: isActive ? 'blue' : 'teal',
           alignItems: 'center', 
           justifyContent: 'center' 
         }}
         onLongPress={move}
         onPressOut={moveEnd}
+        onPress={() => this.updateState(item.title)}
       >
-        <Text style={{ 
-          fontWeight: 'bold', 
-          color: 'white',
-          fontSize: 32,
-        }}>{item.title}</Text>
+        {
+          item.show 
+          ?
+            <Image style={[styles.img, styles.imgG]} source={eval(item.title)} />
+          :
+            <Image style={[styles.img, styles.imgR]} source={eval(item.title)} />
+        }
+     
       </TouchableOpacity>
     )
   }
 
   render() {
+    console.log(this.state);
+    
 
-    const components = [...this.state.data1];
-
-    // console.log(x);
-
-    // console.log(this.state)
     return (
-      <View style={{ flex: 1, borderWidth: 2, borderColor: 'red'}}>
-        {components.map(component => {
-          
-          console.log("item", component.slides);
-          // {items = component.slides}
+      <View style={{flexDirection: 'row', borderWidth: 2, borderColor: 'red'}}>
+        {this.state.components.map((component, index) => 
           <DraggableFlatList
+            key={index}
             data={component.slides}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => `draggable-item-${item.title}`}
             scrollPercent={5}
-            onMoveEnd={() => this.end({data, keyExtractor})}
             // onMoveEnd={({ data }) => this.setState({ data })}
           />
-
-        })}
+        )}
 
 
       </View>
@@ -80,4 +106,47 @@ class App extends Component {
   }
 }
 
-export default App;
+
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    borderRadius: 12,
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    alignItems: 'center',
+    overflow: 'hidden',
+    padding: 12,
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  buttonG: {
+    backgroundColor: colors.active,
+  },
+  buttonR: {
+    backgroundColor: colors.inactive,
+  },
+  start: {
+    color: colors.white,
+    backgroundColor: colors.secondary,
+    borderRadius: 0,
+    fontSize: 55,
+  },
+  img: {
+    width: 300,
+    height: 300,
+    borderWidth: 5,
+    borderRadius: 30
+  },
+  imgR: {
+    borderColor: colors.inactive,
+  },
+  imgG: {
+    borderColor: colors.active,
+  },
+});
