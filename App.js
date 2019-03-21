@@ -34,32 +34,37 @@ export default class App extends Component {
       components: data.components,
     };
 
-    // this.updateState = this.updateState.bind(this);
+    this.updateState = this.updateState.bind(this);
+  }
+
+  updateState = (title) => {
+    if (title === undefined) {
+      console.log("NO TITLE");
+      return;
+    }
+
+    console.log("UPDATING STATE");
+  
+    this.setState((state) => {
+      let newState = JSON.parse(JSON.stringify(state));
+      newState.components.forEach((comp) => {
+        comp.slides.forEach((slide) => {
+          if (slide.title == title) {
+            slide.show = !slide.show
+          }
+        });
+      });
+  
+      return newState
+    });
+
+
   }
 
 
 
   renderItem = ({ item, index, move, moveEnd, isActive }) => {
-
-    const updateState = (title) => {
-      if (title === undefined) {
-        console.log("NO TITLE");
-        return;
-      }
-    
-      this.setState((state) => {
-        let newState = Object.assign({}, state);
-        newState.components.forEach((comp) => {
-          comp.slides.forEach((slide) => {
-            if (slide.title == title) {
-              slide.show = !slide.show
-            }
-          });
-        });
-    
-        return newState
-      });
-    }
+    console.log('item', item);
 
     // console.log('ITEM: ', item);
     return (
@@ -69,7 +74,7 @@ export default class App extends Component {
           alignItems: 'center', 
           justifyContent: 'center' 
         }}
-        onPress={() => updateState(item.title)}
+        onPress={() => this.updateState(item.title) }
         onLongPress={move}
         onPressOut={moveEnd}
 
@@ -92,6 +97,7 @@ export default class App extends Component {
 
     return (
       <View style={{flexDirection: 'row', borderWidth: 2, borderColor: 'red'}}>
+        <Text style={{ color: 'red', fontSize: 30}}>{this.state.components[0].slides[0].show.toString()}</Text>
         {this.state.components.map((component, index) => 
           <DraggableFlatList
             key={index}
@@ -99,6 +105,7 @@ export default class App extends Component {
             renderItem={this.renderItem}
             keyExtractor={(item, index) => `draggable-item-${item.title}`}
             scrollPercent={5}
+            // extraData={component.slides}
             // onMoveEnd={({ data }) => this.setState({ data })}
           />
         )}
