@@ -34,11 +34,13 @@ export default class App extends Component {
     this.state = {
       components: data.components,
     };
-
-    // this.updateState = this.updateState.bind(this);
   }
 
   updateStateAfterDrag = (data, component) => {
+    if(data === undefined || component === undefined) {
+      return;
+    }
+
     // console.log('NEW DATA: ', data);
     // console.log('COM from props', component);
     this.setState((state) => {
@@ -87,7 +89,6 @@ export default class App extends Component {
     return (
       <TouchableWithoutFeedback
         style={{ 
-          // backgroundColor: isActive ? 'blue' : 'teal',
           alignItems: 'center', 
           justifyContent: 'center' 
         }}
@@ -102,13 +103,11 @@ export default class App extends Component {
             <Image 
               style={isActive ? [styles.img, styles.imgG, styles.move] : [styles.img, styles.imgG]} 
               source={eval(item.title)} 
-            
             />
           :
             <Image 
               style={isActive ? [styles.img, styles.imgR, styles.move] : [styles.img, styles.imgR]} 
               source={eval(item.title)} 
-            
             />
         }
      
@@ -117,12 +116,11 @@ export default class App extends Component {
   }
 
   render() {
-    console.log('STATE: ', this.state);
+    // console.log('STATE: ', this.state);
     
 
     return (
       <View style={{flexDirection: 'row', borderWidth: 2, borderColor: 'red'}}>
-        {/* <Text style={{ color: 'red', fontSize: 30}}>{this.state.components[0].slides[0].show.toString()}</Text> */}
         {this.state.components.map((component, index) => 
           <DraggableFlatList
             key={index}
@@ -130,12 +128,9 @@ export default class App extends Component {
             renderItem={this.renderItem}
             keyExtractor={(item, index) => `draggable-item-${item.title}`}
             scrollPercent={5}
-            // extraData={component.slides}
             onMoveEnd={({data}) => this.updateStateAfterDrag({data}, component)}
           />
         )}
-
-
       </View>
     )
   }
